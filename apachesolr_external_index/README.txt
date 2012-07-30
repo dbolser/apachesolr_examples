@@ -1,0 +1,12 @@
+Example module for using external data.
+
+Use Solr 3.5.0 or 3.6.x and reate a new core on your localhost/dev Solr sever named "ext".
+
+Copy from the apachesolr module solr-conf/solrconfig-solr3x.xml to the core's conf/solrconfig.xml
+
+Copy from this module schema.xml to the core's conf/schema.xml.
+
+Load the example external data using curl:
+
+curl "http://localhost:8983/solr/ext/update/csv?f.size.split=true&commit=true" --data-binary @shirts.csv -H 'Content-type:text/plain; charset=utf-8'
+

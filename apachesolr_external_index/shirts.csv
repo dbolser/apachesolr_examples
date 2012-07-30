@@ -1,0 +1,11 @@
+id,_version_,cat,color,price,size,url,text,description
+"XYZ-23-red","1","XYZ-23", "red", "23.99", "S,M,L,XL,XXL", "All cotton, made on Mars", "Rugby shirt"
+"XYZ-23-blue","1","XYZ-23", "green", "23.99", "S,M,L,XL,XXL", "All cotton, made on Mars", "Rugby shirt"
+"XYZ-23-green","1","XYZ-23", "blue", "23.99", "S,M,L,XL,XXL", "All cotton, made on Mars", "Rugby shirt"
+"XYZ-24-white","1","XYZ-24", "white", "16.50", "XS,S,M,L,XL,XXL", "All cotton, made on Venus", "t-shirt"
+"XYZ-24-beige","1","XYZ-24", "beige", "16.50", "XS,S,M,L,XL,XXL", "All cotton, made on Venus", "t-shirt"
+"XYZ-25-red","1","XYZ-25", "red", "18.99", "S,M,L,XL,XXL", "Bamboo fiber, made in USA", "camisole"
+"XYZ-25-blue","1","XYZ-25", "blue", "18.99", "S,M,L,XL,XXL", "Bamboo fiber, made in USA", "camisole"
+"XYZ-25-purple","1","XYZ-25", "purple", "18.99", "S,M,L,XL,XXL", "Bamboo fiber, made in USA", "camisole"
+"XYZ-26-blue","1","XYZ-26", "blue", "11.00", "S,M,L,XL", "Bamboo fiber, made in USA", "sleveless undershirt"
+"XYZ-26-white","1","XYZ-26", "white", "11.00", "S,M,L,XL", "Bamboo fiber, made in USA", "sleveless undershirt"

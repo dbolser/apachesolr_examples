@@ -356,6 +356,9 @@
    <field name="_version_"  type="long" indexed="true" stored="true" />
    <!-- catalog identifier -->
    <field name="cat" type="string" indexed="true" stored="true"/>
+   <field name="color" type="string" indexed="true" stored="true"/>
+   <field name="price" type="tfloat" indexed="true" stored="true"/>
+   <field name="size" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="url" type="string" indexed="true" stored="true"/>
    <field name="text" type="text" indexed="true" stored="true" termVectors="true"/>
    <field name="description" type="text_und" indexed="true" stored="true" termVectors="true"/>
