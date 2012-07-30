@@ -1,0 +1,4 @@
+name = Apache Solr external index
+description = Examples for searching with Solr
+package = Apache Solr Examples
+core = 7.x

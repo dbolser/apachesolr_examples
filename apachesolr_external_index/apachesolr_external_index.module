@@ -1,0 +1,6 @@
+<?php
+/**
+ * @file
+ * Apache Solr extern index module - example module for using external data.
+ */
+
