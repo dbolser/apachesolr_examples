@@ -8,6 +8,6 @@ Copy from this module schema.xml to the core's conf/schema.xml.
 
 Load the example external data using curl:
 
-curl "http://localhost:8983/solr/ext/update/csv?f.size.split=true&commit=true" --data-binary @genes.csv -H 'Content-type:text/plain; charset=utf-8'
+curl "http://localhost:8983/solr/ext/update/csv?commit=true" --data-binary @genes.csv -H 'Content-type:text/plain; charset=utf-8'
 
 Sample gene data exported from AceView at the National Library of Medicine, http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/  see http://www.ncbi.nlm.nih.gov/About/disclaimer.html
