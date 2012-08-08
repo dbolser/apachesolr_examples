@@ -1,6 +1,71 @@
 <?php
 /**
  * @file
- * Apache Solr extern index module - example module for using external data.
+ * Apache Solr external index module - example module for using external data.
  */
+
+/**
+ * implements hook_apachesolr_search_page_alter().
+ */
+function apachesolr_external_index_apachesolr_search_page_alter(&$build, $search_page) {
+  // Look for a hard-coded env_id
+  if ($search_page->env_id == 'ext_1' && isset($build['search_results']['#theme']) && $build['search_results']['#theme'] == 'search_results') {
+    $build['search_results']['#theme'] = 'apachesolr_external_index_results';
+  }
+}
+
+/**
+ * implements hook_theme().
+ */
+function apachesolr_external_index_theme() {
+  return array(
+    'apachesolr_external_index_results' => array(
+      'variables' => array('results' => NULL),
+    ),
+  );
+}
+
+function theme_apachesolr_external_index_results($variables) {
+  $rows = array();
+  $header = array('id', 'species', 'description');
+  foreach ($variables['results'] as $doc) {//drupal_set_message('<pre>'.print_r($doc,1));
+    $row = array();
+    $row[] = l($doc['fields']['id'], $doc['fields']['url']);
+    $row[] = $doc['fields']['species'];
+    $row[] = $doc['fields']['content'];
+    $rows[] = $row;
+  }
+  return theme('table', array('header' => $header, 'rows' => $rows));
+}
+
+/**
+ * implements hook_apachesolr_query_alter().
+ */
+function apachesolr_external_index_apachesolr_query_alter($query) {
+  // Get stored fields.
+  $query->replaceParam('fl', array('id', 'cat', 'species', 'url', 'score', 'content'));
+}
+
+/**
+ * implements hook_apachesolr_search_result_alter().
+ */
+function apachesolr_external_index_apachesolr_search_result_alter($doc, $extra, $query) {
+  // apachesolr_search module expects entity_type to be set.
+  $doc->entity_type = 'gene';
+  $doc->path = $doc->url;
+}
+
+/**
+ * Implementation of hook_ctools_plugin_api().
+ *
+ * Tell CTools that we support the default_mymodule_presets API.
+ */
+function apachesolr_external_index_ctools_plugin_api($owner, $api) {
+  if ($owner == 'apachesolr' && $api == 'apachesolr_environments') {
+    return array('version' => 1);
+  }
+  if ($owner == 'apachesolr_search' && $api == 'apachesolr_search_defaults') {
+    return array('version' => 3);
+  }
+}
 
