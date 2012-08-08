@@ -9,7 +9,7 @@
  */
 function apachesolr_external_index_apachesolr_search_page_alter(&$build, $search_page) {
   // Look for a hard-coded env_id
-  if ($search_page->env_id == 'ext_1' && isset($build['search_results']['#theme']) && $build['search_results']['#theme'] == 'search_results') {
+  if ($search_page['env_id'] == 'ext_1' && isset($build['search_results']['#theme']) && $build['search_results']['#theme'] == 'search_results') {
     $build['search_results']['#theme'] = 'apachesolr_external_index_results';
   }
 }
@@ -54,6 +54,30 @@ function apachesolr_external_index_apachesolr_search_result_alter($doc, $extra, 
   // apachesolr_search module expects entity_type to be set.
   $doc->entity_type = 'gene';
   $doc->path = $doc->url;
+}
+
+/**
+ * Implements hook_facetapi_facet_info().
+ * Provides the definitions for the extra facets.
+ *
+ * @param array $searcher_info
+ *   The definition of the searcher that facets are being collected for.
+ *
+ * @return array
+ *   An associative array keyed by unique name of the facet.
+ */
+function apachesolr_external_index_facetapi_facet_info($searcher_info) {
+  $facets = array();
+  if ('apachesolr' == $searcher_info['adapter'] && $searcher_info['instance'] == 'ext_1') {
+    $environment = apachesolr_environment_load($searcher_info['instance']);
+    $facets['cat'] = array(
+      'label' => t('Gene category'),
+      'description' => t('Filter by category.'),
+      'field' => 'cat',
+      'facet mincount allowed' => TRUE,
+    );
+  }
+  return $facets;
 }
 
 /**
