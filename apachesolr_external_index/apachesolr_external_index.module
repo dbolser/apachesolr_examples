@@ -35,7 +35,7 @@ function theme_apachesolr_external_index_results($variables) {
     $row[] = $doc['fields']['content'];
     $rows[] = $row;
   }
-  return theme('table', array('header' => $header, 'rows' => $rows));
+  return theme('table', array('header' => $header, 'rows' => $rows)) . theme('pager');
 }
 
 /**
@@ -44,6 +44,7 @@ function theme_apachesolr_external_index_results($variables) {
 function apachesolr_external_index_apachesolr_query_alter($query) {
   // Get stored fields.
   $query->replaceParam('fl', array('id', 'cat', 'species', 'url', 'score', 'content'));
+  $query->replaceParam('hl', FALSE);
 }
 
 /**
