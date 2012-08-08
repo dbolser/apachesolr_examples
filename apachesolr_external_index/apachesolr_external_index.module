@@ -76,6 +76,12 @@ function apachesolr_external_index_facetapi_facet_info($searcher_info) {
       'field' => 'cat',
       'facet mincount allowed' => TRUE,
     );
+    $facets['species'] = array(
+      'label' => t('Gene species'),
+      'description' => t('Filter by species.'),
+      'field' => 'species',
+      'facet mincount allowed' => TRUE,
+    );
   }
   return $facets;
 }

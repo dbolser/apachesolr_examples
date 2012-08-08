@@ -14,3 +14,10 @@ curl "http://localhost:8983/solr/ext/update/csv?commit=true" --data-binary @gene
 Sample gene data exported from AceView at the National Library of Medicine,
 http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/
 see http://www.ncbi.nlm.nih.gov/About/disclaimer.html
+
+You may need an extra cache clear after enabling the module to get the custom
+search page to get into the menu router. Then go to the blocks page and
+configure the 2 facet blocks.
+
+Try a search like: ?q=ext/search/protein
+You should see several pages of results and facets in 2 blocks.
