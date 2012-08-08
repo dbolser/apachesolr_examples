@@ -28,7 +28,7 @@ function apachesolr_external_index_theme() {
 function theme_apachesolr_external_index_results($variables) {
   $rows = array();
   $header = array('id', 'species', 'description');
-  foreach ($variables['results'] as $doc) {//drupal_set_message('<pre>'.print_r($doc,1));
+  foreach ($variables['results'] as $doc) {
     $row = array();
     $row[] = l($doc['fields']['id'], $doc['fields']['url']);
     $row[] = $doc['fields']['species'];
