@@ -85,12 +85,15 @@ function apachesolr_external_index_facetapi_facet_info($searcher_info) {
  *
  * Tell CTools that we support the default_mymodule_presets API.
  */
-function apachesolr_external_index_ctools_plugin_api($owner, $api) {
-  if ($owner == 'apachesolr' && $api == 'apachesolr_environments') {
+function apachesolr_external_index_ctools_plugin_api($module, $api) {
+  if ($module == 'apachesolr' && $api == 'apachesolr_environments') {
     return array('version' => 1);
   }
-  if ($owner == 'apachesolr_search' && $api == 'apachesolr_search_defaults') {
+  if ($module == 'apachesolr_search' && $api == 'apachesolr_search_defaults') {
     return array('version' => 3);
+  }
+  if ($module == 'facetapi' && $api == 'facetapi_defaults') {
+    return array('version' => 1);
   }
 }
 
