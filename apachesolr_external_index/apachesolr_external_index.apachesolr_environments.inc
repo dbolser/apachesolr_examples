@@ -18,6 +18,7 @@ function apachesolr_external_index_apachesolr_environments() {
   $environment->url = 'http://localhost:8983/solr/ext';
   $environment->service_class = '';
   $environment->conf = array(
+    'facet callbacks' => array('apachesolr_external_index_facet_callback'),
     'apachesolr_read_only' => '0',
     'apachesolr_search_facet_pages' => '',
     'apachesolr_search_show_facets' => 0,

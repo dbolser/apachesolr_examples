@@ -63,8 +63,11 @@ function apachesolr_external_index_apachesolr_search_result_alter($doc, $extra, 
 }
 
 /**
- * Implements hook_facetapi_facet_info().
- * Provides the definitions for the extra facets.
+ * Implements an environment-specific facet callback called from apachesolr_facetapi_facet_info()
+ *
+ * Returns the same values as used by hook_facetapi_facet_info().  We
+ * could have used that hook indead, but then our facets would be added
+ * to rather than replacing the defaults defined by the apachesolr module.
  *
  * @param array $searcher_info
  *   The definition of the searcher that facets are being collected for.
@@ -72,23 +75,22 @@ function apachesolr_external_index_apachesolr_search_result_alter($doc, $extra, 
  * @return array
  *   An associative array keyed by unique name of the facet.
  */
-function apachesolr_external_index_facetapi_facet_info($searcher_info) {
+function apachesolr_external_index_facet_callback($searcher_info) {
   $facets = array();
-  if ('apachesolr' == $searcher_info['adapter'] && $searcher_info['instance'] == APACHESOLR_EXTERNAL_INDEX_ID) {
-    $environment = apachesolr_environment_load($searcher_info['instance']);
-    $facets['cat'] = array(
-      'label' => t('Gene category'),
-      'description' => t('Filter by category.'),
-      'field' => 'cat',
-      'facet mincount allowed' => TRUE,
-    );
-    $facets['species'] = array(
-      'label' => t('Gene species'),
-      'description' => t('Filter by species.'),
-      'field' => 'species',
-      'facet mincount allowed' => TRUE,
-    );
-  }
+
+  $facets['cat'] = array(
+    'label' => t('Gene category'),
+    'description' => t('Filter by category.'),
+    'field' => 'cat',
+    'facet mincount allowed' => TRUE,
+  );
+  $facets['species'] = array(
+    'label' => t('Gene species'),
+    'description' => t('Filter by species.'),
+    'field' => 'species',
+    'facet mincount allowed' => TRUE,
+  );
+
   return $facets;
 }
 
