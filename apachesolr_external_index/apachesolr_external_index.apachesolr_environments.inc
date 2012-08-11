@@ -13,7 +13,7 @@ function apachesolr_external_index_apachesolr_environments() {
 
   $environment = new stdClass();
   $environment->api_version = 1;
-  $environment->env_id = 'ext_1';
+  $environment->env_id = APACHESOLR_EXTERNAL_INDEX_ID; // defined in the .module
   $environment->name = 'External server example';
   $environment->url = 'http://localhost:8983/solr/ext';
   $environment->service_class = '';
@@ -42,7 +42,7 @@ function apachesolr_external_index_apachesolr_environments() {
     ),
   );
   $environment->index_bundles = array();
-  $environments['ext_1'] = $environment;
+  $environments[$environment->env_id] = $environment;
 
   return $environments;
 }

@@ -14,8 +14,8 @@ function apachesolr_external_index_facetapi_default_facet_settings() {
   $facet = new stdClass();
   $facet->disabled = FALSE; /* Edit this to true to make a default facet disabled initially */
   $facet->api_version = 1;
-  $facet->name = 'apachesolr@ext_1:block:cat';
-  $facet->searcher = 'apachesolr@ext_1';
+  $facet->name = 'apachesolr@' . APACHESOLR_EXTERNAL_INDEX_ID . ':block:cat';
+  $facet->searcher = 'apachesolr@' . APACHESOLR_EXTERNAL_INDEX_ID; // defined in the .module
   $facet->realm = 'block';
   $facet->facet = 'cat';
   $facet->enabled = TRUE;
@@ -43,13 +43,13 @@ function apachesolr_external_index_facetapi_default_facet_settings() {
     'nofollow' => 1,
     'show_expanded' => 0,
   );
-  $facets['apachesolr@ext_1:block:cat'] = $facet;
+  $facets[$facet->name] = $facet;
 
   $facet = new stdClass();
   $facet->disabled = FALSE; /* Edit this to true to make a default facet disabled initially */
   $facet->api_version = 1;
-  $facet->name = 'apachesolr@ext_1:block:species';
-  $facet->searcher = 'apachesolr@ext_1';
+  $facet->name = 'apachesolr@' . APACHESOLR_EXTERNAL_INDEX_ID . ':block:species';
+  $facet->searcher = 'apachesolr@' . APACHESOLR_EXTERNAL_INDEX_ID; // defined in the .module
   $facet->realm = 'block';
   $facet->facet = 'species';
   $facet->enabled = TRUE;
@@ -77,7 +77,7 @@ function apachesolr_external_index_facetapi_default_facet_settings() {
     'nofollow' => 1,
     'show_expanded' => 0,
   );
-  $facets['apachesolr@ext_1:block:species'] = $facet;
+  $facets[$facet->name] = $facet;
 
   return $facets;
 }

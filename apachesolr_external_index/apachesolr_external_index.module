@@ -4,12 +4,14 @@
  * Apache Solr external index module - example module for using external data.
  */
 
+define('APACHESOLR_EXTERNAL_INDEX_ID', 'ext_1');
+
 /**
  * implements hook_apachesolr_search_page_alter().
  */
 function apachesolr_external_index_apachesolr_search_page_alter(&$build, $search_page) {
   // Look for a hard-coded env_id
-  if ($search_page['env_id'] == 'ext_1' && isset($build['search_results']['#theme']) && $build['search_results']['#theme'] == 'search_results') {
+  if ($search_page['env_id'] == APACHESOLR_EXTERNAL_INDEX_ID && isset($build['search_results']['#theme']) && $build['search_results']['#theme'] == 'search_results') {
     $build['search_results']['#theme'] = 'apachesolr_external_index_results';
   }
 }
@@ -42,18 +44,22 @@ function theme_apachesolr_external_index_results($variables) {
  * implements hook_apachesolr_query_alter().
  */
 function apachesolr_external_index_apachesolr_query_alter($query) {
-  // Get stored fields.
-  $query->replaceParam('fl', array('id', 'cat', 'species', 'url', 'score', 'content'));
-  $query->replaceParam('hl', FALSE);
+  if ($query->solr('getId') == APACHESOLR_EXTERNAL_INDEX_ID) {
+    // Get stored fields.
+    $query->replaceParam('fl', array('id', 'cat', 'species', 'url', 'score', 'content'));
+    $query->replaceParam('hl', FALSE);
+  }
 }
 
 /**
  * implements hook_apachesolr_search_result_alter().
  */
 function apachesolr_external_index_apachesolr_search_result_alter($doc, $extra, $query) {
-  // apachesolr_search module expects entity_type to be set.
-  $doc->entity_type = 'gene';
-  $doc->path = $doc->url;
+  if ($query->solr('getId') == APACHESOLR_EXTERNAL_INDEX_ID) {
+    // apachesolr_search module expects entity_type to be set.
+    $doc->entity_type = 'gene';
+    $doc->path = $doc->url;
+  }
 }
 
 /**
@@ -68,7 +74,7 @@ function apachesolr_external_index_apachesolr_search_result_alter($doc, $extra, 
  */
 function apachesolr_external_index_facetapi_facet_info($searcher_info) {
   $facets = array();
-  if ('apachesolr' == $searcher_info['adapter'] && $searcher_info['instance'] == 'ext_1') {
+  if ('apachesolr' == $searcher_info['adapter'] && $searcher_info['instance'] == APACHESOLR_EXTERNAL_INDEX_ID) {
     $environment = apachesolr_environment_load($searcher_info['instance']);
     $facets['cat'] = array(
       'label' => t('Gene category'),

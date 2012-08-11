@@ -19,7 +19,7 @@ function apachesolr_external_index_apachesolr_search_default_searchers() {
   $searcher->description = '';
   $searcher->search_path = 'ext/search';
   $searcher->page_title = 'External data';
-  $searcher->env_id = 'ext_1';
+  $searcher->env_id = APACHESOLR_EXTERNAL_INDEX_ID; // defined in the .module
   $searcher->settings = array(
     'fq' => array(),
     'apachesolr_search_custom_enable' => 0,
