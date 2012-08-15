@@ -11,7 +11,9 @@ define('APACHESOLR_EXTERNAL_INDEX_ID', 'ext_1');
  */
 function apachesolr_external_index_apachesolr_search_page_alter(&$build, $search_page) {
   // Look for a hard-coded env_id
-  if ($search_page['env_id'] == APACHESOLR_EXTERNAL_INDEX_ID && isset($build['search_results']['#theme']) && $build['search_results']['#theme'] == 'search_results') {
+  if ($search_page['env_id'] == APACHESOLR_EXTERNAL_INDEX_ID &&
+      isset($build['search_results']['#theme']) &&
+      $build['search_results']['#theme'] == 'search_results') {
     $build['search_results']['#theme'] = 'apachesolr_external_index_results';
   }
 }
@@ -29,15 +31,18 @@ function apachesolr_external_index_theme() {
 
 function theme_apachesolr_external_index_results($variables) {
   $rows = array();
-  $header = array('id', 'species', 'description');
+  $header = array('Provider', 'Type', 'ID', 'Species', 'Description');
   foreach ($variables['results'] as $doc) {
     $row = array();
-    $row[] = l($doc['fields']['id'], $doc['fields']['url']);
+    $row[] = $doc['fields']['provider'];
+    $row[] = $doc['fields']['obj_type'];
+    $row[] = l($doc['fields']['id'], $doc['fields']['src_url']);
     $row[] = $doc['fields']['species'];
-    $row[] = $doc['fields']['content'];
+    $row[] = $doc['fields']['obj_desc'];
     $rows[] = $row;
   }
-  return theme('table', array('header' => $header, 'rows' => $rows)) . theme('pager');
+  return theme('table', array('header' => $header, 'rows' => $rows)).
+    theme('pager');
 }
 
 /**
@@ -46,7 +51,10 @@ function theme_apachesolr_external_index_results($variables) {
 function apachesolr_external_index_apachesolr_query_alter($query) {
   if ($query->solr('getId') == APACHESOLR_EXTERNAL_INDEX_ID) {
     // Get stored fields.
-    $query->replaceParam('fl', array('id', 'cat', 'species', 'url', 'score', 'content'));
+    $query->replaceParam('fl',
+                         array('id', 'obj_desc', 'obj_type',
+                               'provider', 'species', 'src_url',
+                               'timestamp', 'score'));
     $query->replaceParam('hl', FALSE);
   }
 }
@@ -58,7 +66,7 @@ function apachesolr_external_index_apachesolr_search_result_alter($doc, $extra, 
   if ($query->solr('getId') == APACHESOLR_EXTERNAL_INDEX_ID) {
     // apachesolr_search module expects entity_type to be set.
     $doc->entity_type = 'gene';
-    $doc->path = $doc->url;
+    $doc->path = $doc->src_url;
   }
 }
 
@@ -78,19 +86,27 @@ function apachesolr_external_index_apachesolr_search_result_alter($doc, $extra, 
 function apachesolr_external_index_facet_callback($searcher_info) {
   $facets = array();
 
-  $facets['cat'] = array(
-    'label' => t('Gene category'),
-    'description' => t('Filter by category.'),
-    'field' => 'cat',
+  $facets['obj_type'] = array(
+    'label' => t('Resource category'),
+    'description' => t('Filter by resource category.'),
+    'field' => 'obj_type',
     'facet mincount allowed' => TRUE,
   );
+  
   $facets['species'] = array(
-    'label' => t('Gene species'),
+    'label' => t('Species'),
     'description' => t('Filter by species.'),
     'field' => 'species',
     'facet mincount allowed' => TRUE,
   );
 
+  $facets['provider'] = array(
+    'label' => t('Provider'),
+    'description' => t('Filter by provider.'),
+    'field' => 'provider',
+    'facet mincount allowed' => TRUE,
+  );
+  
   return $facets;
 }
 

@@ -13,33 +13,24 @@ function apachesolr_external_index_apachesolr_environments() {
 
   $environment = new stdClass();
   $environment->api_version = 1;
-  $environment->env_id = APACHESOLR_EXTERNAL_INDEX_ID; // defined in the .module
-  $environment->name = 'External server example';
-  $environment->url = 'http://localhost:8983/solr/ext';
+  // INDEX_ID is defined in the .module
+  $environment->env_id = APACHESOLR_EXTERNAL_INDEX_ID;
+  $environment->name = 'Temporary transPLANT index on ebi1-016';
+  $environment->url = 'http://ebi1-016:8983/solr';
   $environment->service_class = '';
   $environment->conf = array(
     'facet callbacks' => array('apachesolr_external_index_facet_callback'),
     'apachesolr_read_only' => '1',
     'apachesolr_search_facet_pages' => '',
     'apachesolr_search_show_facets' => 0,
-    'field_bias' => array(
-      'cat' => '0',
-      'content' => '1.0',
-      'id' => '0',
-      'label' => '0',
-      'other_text' => '0.1',
-      'species' => '0',
-      'tags_a' => '0',
-      'tags_h1' => '0',
-      'tags_h2_h3' => '0',
-      'tags_h4_h5_h6' => '0',
-      'tags_inline' => '0',
-      'taxonomy_names' => '0',
+    'field_bias'  => array(
+      'id'        => '5.0',
+      'obj_desc'  => '1.0',
+      'obj_type'  => '0.5',
+      'provider'  => '0.5',
+      'species'   => '0.5',
+      'src_url'   => '0.0',
       'timestamp' => '0',
-      'tos_content_extra' => '0',
-      'tos_name' => '0',
-      'ts_comments' => '0',
-      'url' => '0',
     ),
   );
   $environment->index_bundles = array();
