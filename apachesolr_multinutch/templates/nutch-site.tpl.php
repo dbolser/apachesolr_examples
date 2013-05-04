@@ -18,7 +18,7 @@
 
 <property>
   <name>plugin.includes</name>
-  <value>protocol-http|urlfilter-(prefix|suffix|domain)|parse-(html|tika)|index-(static|basic|anchor<?php print $index_metadata; ?>)|scoring-opic|urlnormalizer-(pass|regex|basic)</value>
+  <value>protocol-http|urlfilter-(suffix|regex)|parse-(html|tika|metatags)|index-(static|basic|anchor<?php print $index_metadata; ?>)|scoring-opic|urlnormalizer-(pass|regex|basic)</value>
 </property>
 
 <property>
