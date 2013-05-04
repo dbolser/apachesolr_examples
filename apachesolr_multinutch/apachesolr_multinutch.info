@@ -1,0 +1,5 @@
+name = Apache Solr Mulitsite Search with Nutch
+description = Facilitates searching a federated index where some content was indexed by nutch
+package = Apache Solr Examples
+core = 7.x
+dependencies[] = apachesolr_multisitesearch

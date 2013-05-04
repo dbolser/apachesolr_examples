@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mapping>
+	<!-- Simple mapping of fields created by Nutch IndexingFilters
+	     to fields defined (and expected) in Solr schema.xml.
+
+             Any fields in NutchDocument that match a name defined
+             in field/@source will be renamed to the corresponding
+             field/@dest.
+             Additionally, if a field name (before mapping) matches
+             a copyField/@source then its values will be copied to 
+             the corresponding copyField/@dest.
+
+             uniqueKey has the same meaning as in Solr schema.xml
+             and defaults to "id" if not defined.
+         -->
+	<fields>
+		<field dest="content" source="content"/>
+		<field dest="label" source="title"/>
+		<field dest="site" source="host"/>
+                <copyField source="host" dest="bundle"/>
+		<field dest="segment" source="segment"/>
+		<field dest="boost" source="boost"/>
+		<field dest="id" source="digest"/>
+		<field dest="timestamp" source="tstamp"/>
+		<field dest="url" source="url"/>
+		<field dest="entity_type" source="entity_type"/>
+                <field dest="ts_metatag_description" source="metatag.description"/>
+                <field dest="sm_vid_metatag_keywords" source="metatag.keywords"/>
+	</fields>
+	<uniqueKey>id</uniqueKey>
+</mapping>

@@ -1,0 +1,6 @@
+# config for urlfilter-prefix plugin
+# allow only:
+
+http://
+# If https is enabled, you need change protocol-http plugin to protocol-httpclient
+#https://
