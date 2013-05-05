@@ -3,3 +3,4 @@ description = Facilitates searching a federated index where some content was ind
 package = Apache Solr Examples
 core = 7.x
 dependencies[] = apachesolr_multisitesearch
+
