@@ -18,15 +18,16 @@
 		<field dest="content" source="content"/>
 		<field dest="label" source="title"/>
 		<field dest="site" source="host"/>
-                <copyField source="host" dest="bundle"/>
-		<field dest="segment" source="segment"/>
+    <copyField source="host" dest="bundle"/>
+		<field dest="ss_nutch_segment" source="segment"/>
 		<field dest="boost" source="boost"/>
 		<field dest="id" source="digest"/>
+		<copyField source="digest" dest="ss_nutch_bundle"/>
 		<field dest="timestamp" source="tstamp"/>
 		<field dest="url" source="url"/>
 		<field dest="entity_type" source="entity_type"/>
-                <field dest="ts_metatag_description" source="metatag.description"/>
-                <field dest="sm_vid_metatag_keywords" source="metatag.keywords"/>
+		<field dest="ts_metatag_description" source="metatag.description"/>
+		<field dest="sm_vid_metatag.keywords" source="metatag.keywords"/>
 	</fields>
 	<uniqueKey>id</uniqueKey>
 </mapping>

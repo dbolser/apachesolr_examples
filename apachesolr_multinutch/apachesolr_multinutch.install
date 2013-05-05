@@ -43,6 +43,13 @@ function apachesolr_multinutch_schema() {
           'not null' => TRUE,
           'default' => '',
         ),
+        'bundle_name' => array(
+          'description' => 'A fake human-readable name for the content-type represented by this site.',
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+          'default' => '',
+        ),
         'hash' => array(
           'description' => 'A unique (random) site key',
           'type' => 'varchar',

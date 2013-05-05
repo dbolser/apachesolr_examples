@@ -9,7 +9,7 @@
 
 # skip URLs containing certain query characters.
 # @todo - for Drupal do we want to exclude ? & =
--[*!@]
+-[*!@?=]
 
 # skip URLs with slash-delimited segment that repeats 3+ times, to break loops
 -.*(/[^/]+)/[^/]+\1/[^/]+\1/

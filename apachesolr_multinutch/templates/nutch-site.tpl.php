@@ -23,7 +23,7 @@
 
 <property>
   <name>index.static</name>
-  <value><?php print implode(',', $index_static_fields); ?></value>
+  <value>entity_type:nutch.crawl,<?php print implode(',', $index_static_fields); ?></value>
   <description>
   comma-separated list of fields in the format name:value
   </description>
