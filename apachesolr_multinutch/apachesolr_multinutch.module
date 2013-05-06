@@ -468,8 +468,10 @@ function apachesolr_multinutch_site_delete($entity) {
 
 function apachesolr_multinutch_generate_form($form , &$form_state, $entity) {
   $form = array();
-  $form['submit'] = array(
+  $form['text'] = array(
+    '#prefix' => '<p>',
     '#markup' => t('Click below to generate nutch conf files using this site\'s values.'),
+    '#suffix' => '</p>',
   );
   $form['submit'] = array(
     '#type' => 'submit',
