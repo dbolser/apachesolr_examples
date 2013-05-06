@@ -47,6 +47,9 @@ Installation
   bin/nutch solrindex http://localhost:8983/solr/ $NUTCH_CONF_DIR/crawl/crawldb -dir $NUTCH_CONF_DIR/crawl/segments -deleteGone
 
 
+===
+Below here needs updating to at least use $NUTCH_CONF_DIR
+
   bin/nutch crawl urls -dir crawl -solr http://localhost:8983/solr/ -depth 10 -topN 1000
 
   In my environment, I like to use linkrank, so crawling takes this form:
