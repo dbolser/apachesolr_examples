@@ -168,7 +168,20 @@ function apachesolr_multinutch_info_page() {
 
 function apachesolr_multinutch_global_config_form($form, &$form_state) {
   $form = array();
-  return $form;
+  $form['apachesolr_multinutch_nutch_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Path to nutch'),
+    '#required' => TRUE,
+    '#default_value' => variable_get('apachesolr_multinutch_nutch_path', ''),
+  );
+  return system_settings_form($form);
+}
+
+function apachesolr_multinutch_global_config_form_validate($form, &$form_state) {
+  $conf_dir = $form_state['values']['apachesolr_multinutch_nutch_path'] . '/conf';
+  if (!file_exists($conf_dir) || !is_dir($conf_dir)) {
+    form_set_error('apachesolr_multinutch_nutch_path', t('Invalid path - no conf directory'));
+  }
 }
 
 /**
@@ -395,7 +408,6 @@ function apachesolr_multinutch_site_form_validate($form, &$form_state) {
   if (preg_match('/\s/', $form_state['values']['bundle_name'])) {
     form_set_error('bundle_name', t('Cantent type name cannot have spaces in it'));
   }
-
 }
 
 
@@ -452,6 +464,72 @@ function apachesolr_multinutch_site_save(&$entity) {
  */
 function apachesolr_multinutch_site_delete($entity) {
   entity_get_controller('apachesolr_multinutch_site')->delete($entity);
+}
+
+function apachesolr_multinutch_generate_form($form , &$form_state) {
+  $form = array();
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Generate'),
+  );
+  return $form;
+}
+
+function apachesolr_multinutch_generate_form_validate($form , &$form_state) {
+  $source = variable_get('apachesolr_multinutch_nutch_path', '');
+  if (!$source) {
+    form_set_error('', t('Missing nutch path for source conf files'));
+  }
+}
+
+function apachesolr_multinutch_generate_form_submit($form , &$form_state) {
+  $site = $form_state['values']['site'];
+  $dest_dir = 'public://apachesolr_multinutch/' . $site->site_id;
+  file_prepare_directory($dest_dir);
+  file_prepare_directory("$dest_dir/urls");
+  $source = variable_get('apachesolr_multinutch_nutch_path', '') . '/conf';
+  foreach (glob($source . '/*') as $filename) {
+    $dest = $dest_dir . '/' . basename($filename);
+    _apachesolr_multinutch_copy($filename, $dest);
+  }
+  $templates_dir = drupal_get_path('module', 'apachesolr_multinutch') . '/templates';
+  foreach (array('prefix-urlfilter.txt', 'solrindex-mapping.xml', 'suffix-urlfilter.txt') as $name) {
+    _apachesolr_multinutch_copy("$templates_dir/$name", "$dest_dir/$name");
+  }
+  $parts = parse_url($site->site_url);
+  $domain = $parts['host'];
+  if (!empty($parts['port'])) {
+    $domain .= ":{$parts['port']}";
+  }
+  if (!empty($parts['path'])) {
+    $domain .= $parts['path'];
+  }
+  $variables = array(
+    'urlfilter_domain' => $domain,
+  );
+  $urlfilter = theme_render_template($templates_dir . '/regex-urlfilter.tpl.php', $variables);
+  file_put_contents("$dest_dir/regex-urlfilter.txt", $urlfilter);
+  $variables = array(
+    'http_agent_name' => $site->http_agent_name,
+    'index_metadata' => $site->index_metadata ? "|metadata" : '',
+    'index_static_fields' => array_merge(array('hash:' . $site->hash), explode('\n', $site->index_static_fields)),
+  );
+  $nutch_site = theme_render_template($templates_dir . '/nutch-site.tpl.php', $variables);
+  file_put_contents("$dest_dir/nutch-site.xml", $nutch_site);
+  file_put_contents("$dest_dir/urls/seed.txt", $site->site_url . "\n");
+  drupal_set_message(t('Generated conf at @dest_dir', array('@dest_dir' => $dest_dir)));
+}
+
+function _apachesolr_multinutch_copy($source, $destination) {
+  if (!@copy($source, $destination)) {
+    // If the copy failed and realpaths exist, retry the operation using them
+    // instead.
+    $real_source = drupal_realpath($source);
+    $real_destination = drupal_realpath($destination);
+    if ($real_source === FALSE || $real_destination === FALSE || !@copy($real_source, $real_destination)) {
+      drupal_set_message(t('Moving @source to @destination failed', array('@source' => $source, '@destination' => $destination)), 'error');
+    }
+  }
 }
 
 /**
