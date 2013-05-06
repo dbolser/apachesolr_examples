@@ -90,6 +90,7 @@ function apachesolr_multinutch_site_uri($site) {
 function apachesolr_multinutch_menu() {
   $items['admin/config/search/apachesolr_multinutch'] = array(
     'title' => 'ApacheSolr Multisite Nutch Sites',
+    'description' => 'Manage site metadata and generate nutch configurations.',
     'page callback' => 'apachesolr_multinutch_info_page',
     'access arguments' => array('view any apachesolr_multinutch_site entity'),
   );
