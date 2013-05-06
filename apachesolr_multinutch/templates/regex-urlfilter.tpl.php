@@ -15,4 +15,4 @@
 -.*(/[^/]+)/[^/]+\1/[^/]+\1/
 
 # accept one domain or subdomain
-+^http://<?php print $urlfilter_domain; ?>/
++^http://<?php print $urlfilter_domain; ?>

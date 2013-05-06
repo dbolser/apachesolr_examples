@@ -469,6 +469,9 @@ function apachesolr_multinutch_site_delete($entity) {
 function apachesolr_multinutch_generate_form($form , &$form_state, $entity) {
   $form = array();
   $form['submit'] = array(
+    '#markup' => t('Click below to generate nutch conf files using this site\'s values.'),
+  );
+  $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Generate'),
   );
@@ -511,6 +514,9 @@ function apachesolr_multinutch_generate_form_submit($form, &$form_state) {
   if (!empty($parts['path'])) {
     $domain .= $parts['path'];
   }
+  else {
+    $domain .= '/';
+  }
   $variables = array(
     'urlfilter_domain' => $domain,
   );
@@ -528,7 +534,7 @@ function apachesolr_multinutch_generate_form_submit($form, &$form_state) {
   $nutch_site = theme_render_template($templates_dir . '/nutch-site.tpl.php', $variables);
   file_put_contents("$dest_dir/nutch-site.xml", $nutch_site);
   file_put_contents("$urls_dir/seed.txt", $site->site_url . "\n");
-  drupal_set_message(t('Generated conf at @dest_dir', array('@dest_dir' => $dest_dir)));
+  drupal_set_message(t('Generated conf at @dest_dir', array('@dest_dir' => drupal_realpath($dest_dir))));
 }
 
 function _apachesolr_multinutch_copy($source, $destination) {

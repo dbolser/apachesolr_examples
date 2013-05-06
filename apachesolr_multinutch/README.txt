@@ -16,29 +16,37 @@ This configuration has been tested against:
 Installation
 ------------
 
-1. Download Nutch version 1.x (it looks as though Nutch 1.6 was just released).
-   http://www.apache.org/dyn/closer.cgi/nutch/
+1. Download the build (bin) Nutch version 1.6+
+   http://www.apache.org/dyn/closer.cgi/nutch/1.6/apache-nutch-1.6-bin.tar.gz
 
-2. Unzip the package and compile Nutch.
+2. If you are unfamiliar with Nutch, read the tutorial: http://wiki.apache.org/nutch/NutchTutorial
 
-   * Run 'ant' to compile.
+3. Enable this module, set the path to the nutch files, and configure 1 or more sites
 
-   * The build will create a directory named apache-nutch-1.x.x/runtime/local/.
-     You run Nutch from that directory.
+4. Use the "Generate" form to create nutch config for a site to crawl.
 
-3. If you are unfamiliar with Nutch, read the tutorial: http://wiki.apache.org/nutch/NutchTutorial
+5. Make note of the URL in the message. If you look at that path, you should see
+   a full set of nutch conf, including customized files:
 
-4. Copy these files from this project to the apache-nutch-1.x.x/runtime/local/conf directory:
-
+   * nutch-site.xml 
    * solrindex-mapping.xml
-   * subcollections.xml
-   * nutch-site.xml # or, add the settings from this file to an existing nutch-site.xml
+   * regex-urlfilter.txt
+   * suffix-urlfilter.txt
+   * urls/seed.txt
 
 5. If you read and understood the tutorial, you are ready to crawl and index.
 
   # Be sure to edit conf/regex-urlfilter.txt appropriately depending
   # on what you want to crawl and that you add a urls directory with seed files. 
   export JAVA_HOME=/usr/lib/jvm/jre-openjdk/
+
+  # Use the path reported by the generate button, then these 2 command should
+  # get you started with a crawl and index (set the right paths and Solr url).
+  export NUTCH_CONF_DIR=/PATH/TO/DRUPAL/sites/mysite/files/apachesolr_multinutch/1
+  bin/nutch crawl $NUTCH_CONF_DIR/urls -dir $NUTCH_CONF_DIR/crawl -depth 10 -topN 2000
+  bin/nutch solrindex http://localhost:8983/solr/ $NUTCH_CONF_DIR/crawl/crawldb -dir $NUTCH_CONF_DIR/crawl/segments -deleteGone
+
+
   bin/nutch crawl urls -dir crawl -solr http://localhost:8983/solr/ -depth 10 -topN 1000
 
   In my environment, I like to use linkrank, so crawling takes this form:
