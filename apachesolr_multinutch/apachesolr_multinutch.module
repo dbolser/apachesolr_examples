@@ -563,7 +563,7 @@ function _apachesolr_multinutch_copy($source, $destination) {
  * @see hook_entity_info_alter()
  */
 
-interface ApacheSolrMulitNutchControllerInterface
+interface ApacheSolrMultiNutchControllerInterface
   extends DrupalEntityControllerInterface {
   public function create();
   public function save($entity);
@@ -578,7 +578,7 @@ interface ApacheSolrMulitNutchControllerInterface
  */
 class ApacheSolrMulitNutchSiteController
   extends DrupalDefaultEntityController
-  implements ApacheSolrMulitNutchControllerInterface {
+  implements ApacheSolrMultiNutchControllerInterface {
 
   /**
    * Create and return a new apachesolr_multinutch_site entity.
