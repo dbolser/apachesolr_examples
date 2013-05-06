@@ -34,8 +34,10 @@ function apachesolr_multinutch_entity_info() {
       'label' => 'sitename',
     ),
     // Apachesolr indexing info
-    'indexable' => TRUE,
-    'document callback' => array('apachesolr_multinutch_site_solr_document'),
+    'apachesolr' => array(
+      'indexable' => TRUE,
+      'document callback' => array('apachesolr_multinutch_site_solr_document'),
+    ),
   );
 
   return $info;
@@ -155,10 +157,7 @@ function apachesolr_multinutch_menu() {
  * Basic overview page.
  */
 function apachesolr_multinutch_info_page() {
-  $content['preface'] = array(
-    '#type' => 'item',
-    '#markup' => t('The entity example provides a simple example entity.')
-  );
+
   $content['table'] = apachesolr_multinutch_site_list_entities();
   $content['config'] = drupal_get_form('apachesolr_multinutch_global_config_form');
 
@@ -209,16 +208,17 @@ function apachesolr_multinutch_site_list_entities() {
   if (!empty($sites)) {
     foreach ($sites as $site) {
       // Create tabular rows for our entities.
+      $uri = apachesolr_multinutch_site_uri($site);
       $row = array(
         'data' => array(
-          'name' => l($site->sitename, apachesolr_multinutch_site_uri($site)),
+          'name' => l($site->sitename, $uri['path']),
           'description' => check_plain($site->description),
           'url' => l($site->site_url, $site->site_url),
         ),
       );
       if (user_access('administer apachesolr_multinutch')) {
-        $row['data']['edit'] = l(t('edit'), apachesolr_multinutch_site_uri($site) . '/edit');
-        $row['data']['generate'] = l(t('generate'), apachesolr_multinutch_site_uri($site) . '/generate');
+        $row['data']['edit'] = l(t('edit'), $uri['path'] . '/edit');
+        $row['data']['generate'] = l(t('generate'), $uri['path'] . '/generate');
       }
       $rows[] = $row;
     }
@@ -268,7 +268,7 @@ function apachesolr_multinutch_site_view($entity, $view_mode = 'default') {
   );
   // We call entity_prepare_view() so it can invoke hook_entity_prepare_view()
   // for us.
-  entity_prepare_view($entity_type, array($entity->basic_id => $entity));
+  entity_prepare_view($entity_type, array($entity->site_id => $entity));
 
   $entity->content['sitename'] = array(
     '#type' => 'item',
@@ -278,7 +278,7 @@ function apachesolr_multinutch_site_view($entity, $view_mode = 'default') {
   $entity->content['description'] = array(
     '#type' => 'item',
     '#title' => t('Site Description'),
-    '#markup' => check_plain($entity->site_description),
+    '#markup' => check_plain($entity->description),
   );
   $entity->content['http_agent_name'] = array(
     '#type' => 'item',
@@ -418,7 +418,7 @@ function apachesolr_multinutch_site_form_submit($form, &$form_state) {
   $site = $form_state['values']['site_entity'];
   foreach (array('sitename', 'site_url', 'hash', 'bundle_name', 'description', 'http_agent_name', 'index_metadata') as $key) {
     if (isset($form_state['values'][$key])) {
-      $entity->{$key} = $form_state['values'][$key];
+      $site->{$key} = $form_state['values'][$key];
     }
   }
   $entity = apachesolr_multinutch_site_save($site);
@@ -466,11 +466,15 @@ function apachesolr_multinutch_site_delete($entity) {
   entity_get_controller('apachesolr_multinutch_site')->delete($entity);
 }
 
-function apachesolr_multinutch_generate_form($form , &$form_state) {
+function apachesolr_multinutch_generate_form($form , &$form_state, $entity) {
   $form = array();
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Generate'),
+  );
+  $form['site'] = array(
+    '#type' => 'value',
+    '#value' => $entity,
   );
   return $form;
 }
@@ -482,11 +486,14 @@ function apachesolr_multinutch_generate_form_validate($form , &$form_state) {
   }
 }
 
-function apachesolr_multinutch_generate_form_submit($form , &$form_state) {
+function apachesolr_multinutch_generate_form_submit($form, &$form_state) {
   $site = $form_state['values']['site'];
+  $top_dir = 'public://apachesolr_multinutch';
+  file_prepare_directory($top_dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
   $dest_dir = 'public://apachesolr_multinutch/' . $site->site_id;
-  file_prepare_directory($dest_dir);
-  file_prepare_directory("$dest_dir/urls");
+  file_prepare_directory($dest_dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+  $urls_dir = "$dest_dir/urls";
+  file_prepare_directory($urls_dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
   $source = variable_get('apachesolr_multinutch_nutch_path', '') . '/conf';
   foreach (glob($source . '/*') as $filename) {
     $dest = $dest_dir . '/' . basename($filename);
@@ -509,14 +516,18 @@ function apachesolr_multinutch_generate_form_submit($form , &$form_state) {
   );
   $urlfilter = theme_render_template($templates_dir . '/regex-urlfilter.tpl.php', $variables);
   file_put_contents("$dest_dir/regex-urlfilter.txt", $urlfilter);
+  $index_static_fields = array('hash:' . $site->hash);
+  if ($site->index_static_fields && strpos($site->index_static_fields, ':')) {
+    $index_static_fields = array_merge($index_static_fields, explode('\n', trim($site->index_static_fields)));
+  }
   $variables = array(
     'http_agent_name' => $site->http_agent_name,
     'index_metadata' => $site->index_metadata ? "|metadata" : '',
-    'index_static_fields' => array_merge(array('hash:' . $site->hash), explode('\n', $site->index_static_fields)),
+    'index_static_fields' => $index_static_fields,
   );
   $nutch_site = theme_render_template($templates_dir . '/nutch-site.tpl.php', $variables);
   file_put_contents("$dest_dir/nutch-site.xml", $nutch_site);
-  file_put_contents("$dest_dir/urls/seed.txt", $site->site_url . "\n");
+  file_put_contents("$urls_dir/seed.txt", $site->site_url . "\n");
   drupal_set_message(t('Generated conf at @dest_dir', array('@dest_dir' => $dest_dir)));
 }
 
@@ -567,6 +578,7 @@ class ApacheSolrMulitNutchSiteController
     $entity = new stdClass();
     $entity->type = 'apachesolr_multinutch_site';
     $entity->site_id = NULL;
+    $entity->site_url = '';
     $entity->description = '';
     $entity->sitename = '';
     $entity->hash = $this->genetate_hash();

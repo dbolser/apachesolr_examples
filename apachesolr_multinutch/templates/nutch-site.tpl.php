@@ -1,8 +1,10 @@
-<?xml version="1.0"?>
-<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <?php
+// PHP is stupid when handing XML:
+print '<?xml version="1.0"?>';
+print '<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>'
+
 /**
- * Tempalte variables
+ * Template variables
  * $http_agent_name
  * $index_metadata is empty or "|metadata"
  * $index_static_fields is an array of strings in the format name:value
@@ -23,7 +25,7 @@
 
 <property>
   <name>index.static</name>
-  <value>entity_type:nutch.crawl,<?php print implode(',', $index_static_fields); ?></value>
+  <value>entity_type:nutch.crawl,access__all:0,<?php print implode(',', $index_static_fields); ?></value>
   <description>
   comma-separated list of fields in the format name:value
   </description>
