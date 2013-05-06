@@ -701,8 +701,8 @@ function apachesolr_multinutch_site_solr_document(ApacheSolrDocument $document, 
   // Rebuild ID.  @see apachesolr_document_id().
   $document->id = "{$document->hash}/{$document->entity_type}/{$document->entity_id}";
   $document->ss_multisite_meta_sitename = apachesolr_clean_text($site->sitename);
-  $document->label = apachesolr_clean_text($site->sitename);
-  $document->content = apachesolr_clean_text($site->description);
+  // teaser field is not searched.
+  $document->teaser = apachesolr_clean_text($site->description);
   // Add bundle information to our metadata
   // We index each name as a string for cross-site faceting
   $document->setMultiValue('sm_multisite_meta_bundles', $site->bundle_name);
