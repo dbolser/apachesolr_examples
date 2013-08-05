@@ -19,7 +19,7 @@ function apachesolr_external_index_apachesolr_environments() {
   $environment->service_class = '';
   $environment->conf = array(
     'facet callbacks' => array('apachesolr_external_index_facet_callback'),
-    'apachesolr_read_only' => '0',
+    'apachesolr_read_only' => '1',
     'apachesolr_search_facet_pages' => '',
     'apachesolr_search_show_facets' => 0,
     'field_bias' => array(
