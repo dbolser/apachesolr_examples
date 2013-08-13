@@ -2,6 +2,7 @@ name = Apache Solr external index
 description = An example of how to search an external index with Solr
 package = Apache Solr Examples
 core = 7.x
+version = "7.x-0.1"
 dependencies[] = apachesolr
 dependencies[] = apachesolr_search
 dependencies[] = ctools
