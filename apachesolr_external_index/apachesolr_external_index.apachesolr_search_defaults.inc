@@ -12,16 +12,17 @@ function apachesolr_external_index_apachesolr_search_default_searchers() {
   $searchers = array();
 
   $searcher = new stdClass();
-  $searcher->disabled = FALSE; /* Edit this to true to make a default searcher disabled initially */
+  /* Edit this to true to make a default searcher disabled initially */
+  $searcher->disabled = FALSE;
   $searcher->api_version = 3;
-  $searcher->page_id = 'my_external_data';
-  $searcher->label = 'My external data';
+  $searcher->page_id = 'transplant_search';
+  $searcher->label = 'Search transPLANT resources';
   $searcher->description = '';
   $searcher->search_path = 'ext/search';
-  $searcher->page_title = 'transPLANT partner resources';
+  $searcher->page_title = 'transPLANT search';
   $searcher->env_id = APACHESOLR_EXTERNAL_INDEX_ID; // defined in the .module
   $searcher->settings = array(
-    'fq' => array(),
+    'fq' => array(), // the default fq is defined in the solrconfig.xml
     'apachesolr_search_custom_enable' => 0,
     'apachesolr_search_search_type' => 'custom',
     'apachesolr_search_search_box' => 1,
@@ -34,4 +35,3 @@ function apachesolr_external_index_apachesolr_search_default_searchers() {
 
   return $searchers;
 }
-

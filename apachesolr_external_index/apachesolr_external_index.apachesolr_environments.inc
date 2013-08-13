@@ -15,8 +15,8 @@ function apachesolr_external_index_apachesolr_environments() {
   $environment->api_version = 1;
   // INDEX_ID is defined in the .module
   $environment->env_id = APACHESOLR_EXTERNAL_INDEX_ID;
-  $environment->name = 'Temporary transPLANT index on ebi1-016';
-  $environment->url = 'http://ebi1-016:8983/solr';
+  $environment->name = 'External transPLANT index';
+  $environment->url = 'http://pweb-2b:8045/solr/collection1';
   $environment->service_class = '';
   $environment->conf = array(
     'facet callbacks' => array('apachesolr_external_index_facet_callback'),
