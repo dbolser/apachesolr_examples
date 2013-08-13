@@ -34,14 +34,16 @@ function theme_apachesolr_external_index_results($variables) {
   $header = array('Provider', 'Type', 'ID', 'Species', 'Description');
   foreach ($variables['results'] as $doc) {
     $row = array();
-    $row[] = $doc['fields']['provider'];
-    $row[] = $doc['fields']['obj_type'];
+    $row[] = implode(', ', $doc['fields']['provider']);
+    $row[] = implode(', ', $doc['fields']['obj_type']);
     $row[] = l($doc['fields']['id'], $doc['fields']['src_url']);
-    $row[] = $doc['fields']['species'];
+    $row[] = implode(', ', $doc['fields']['species']);
     $row[] = $doc['fields']['obj_desc'];
     $rows[] = $row;
   }
-  return theme('table', array('header' => $header, 'rows' => $rows)).
+  return
+    theme('pager').
+    theme('table', array('header' => $header, 'rows' => $rows)).
     theme('pager');
 }
 
