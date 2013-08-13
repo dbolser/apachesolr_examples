@@ -30,7 +30,7 @@ function apachesolr_external_index_apachesolr_search_default_searchers() {
     'apachesolr_search_spellcheck' => 0,
     'apachesolr_search_allow_user_input' => 0,
   );
-  $searchers['my_external_data'] = $searcher;
+  $searchers[$searcher->page_id] = $searcher;
 
   return $searchers;
 }
