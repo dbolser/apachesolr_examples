@@ -363,11 +363,33 @@
     -->
     <field name="id" type="string" indexed="true" stored="true" required="true" />
     
-    <field name="cat" type="string" indexed="true" stored="true"/>
-    <field name="species" type="string" indexed="true" stored="true"/>
-    <field name="url" type="string" indexed="true" stored="true"/>
-    <field name="content" type="text" indexed="true" stored="true" termVectors="true"/>
-    <field name="other_text" type="text" indexed="true" stored="true" termVectors="true" multiValued="true" omitNorms="true"/>
+    <!-- Fields used for faceting need to be indexed! -->
+    <field name="provider" type="string" indexed="true"  stored="true"  multiValued="true" default="To be added" />
+    <field name="species"  type="string" indexed="true"  stored="true"  multiValued="true" default="To be added" />
+    <field name="obj_type" type="string" indexed="true"  stored="true"  multiValued="true" default="To be added" />
+    
+    <!-- We don't need to index this (see below) -->
+    <field name="obj_desc" type="string" indexed="false" stored="true" />
+    <field name="src_url"  type="string" indexed="false" stored="true" />
+    
+    <!-- Our field to search against! -->
+    <field name="text"     type="text"   indexed="true"  stored="false" multiValued="true" />
+    
+    <!-- copyField commands copy one field to another at the time a
+         document is added to the index.  It's used either to index the
+         same field differently, or to add multiple fields to the same
+         field for easier/faster searching.  -->
+    
+    <!-- The string version of these fields is used for faceting and sorting -->
+    <copyField source="provider" dest="text" />
+    <copyField source="species"  dest="text" />
+    <copyField source="obj_type" dest="text" />
+    
+    <!-- Don't forget... -->
+    <copyField source="obj_desc" dest="text" />
+    
+    <!-- Also seems sensible... -->
+    <copyField source="id"       dest="text" />
     
     <!-- Here, default is used to create a "timestamp" field indicating
          when each document was indexed.-->
