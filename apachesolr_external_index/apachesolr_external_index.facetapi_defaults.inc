@@ -14,10 +14,10 @@ function apachesolr_external_index_facetapi_default_facet_settings() {
   $facet = new stdClass();
   $facet->disabled = FALSE; /* Edit this to true to make a default facet disabled initially */
   $facet->api_version = 1;
-  $facet->name = 'apachesolr@' . APACHESOLR_EXTERNAL_INDEX_ID . ':block:cat';
+  $facet->name = 'apachesolr@' . APACHESOLR_EXTERNAL_INDEX_ID . ':block:obj_type';
   $facet->searcher = 'apachesolr@' . APACHESOLR_EXTERNAL_INDEX_ID; // defined in the .module
   $facet->realm = 'block';
-  $facet->facet = 'cat';
+  $facet->facet = 'obj_type';
   $facet->enabled = TRUE;
   $facet->settings = array(
     'weight' => 0,
@@ -52,6 +52,40 @@ function apachesolr_external_index_facetapi_default_facet_settings() {
   $facet->searcher = 'apachesolr@' . APACHESOLR_EXTERNAL_INDEX_ID; // defined in the .module
   $facet->realm = 'block';
   $facet->facet = 'species';
+  $facet->enabled = TRUE;
+  $facet->settings = array(
+    'weight' => 0,
+    'widget' => 'facetapi_links',
+    'filters' => array(),
+    'active_sorts' => array(
+      'active' => 'active',
+      'count' => 'count',
+      'display' => 'display',
+    ),
+    'sort_weight' => array(
+      'active' => -50,
+      'count' => -49,
+      'display' => -48,
+    ),
+    'sort_order' => array(
+      'active' => 3,
+      'count' => 3,
+      'display' => 4,
+    ),
+    'empty_behavior' => 'none',
+    'soft_limit' => 20,
+    'nofollow' => 1,
+    'show_expanded' => 0,
+  );
+  $facets[$facet->name] = $facet;
+
+  $facet = new stdClass();
+  $facet->disabled = FALSE; /* Edit this to true to make a default facet disabled initially */
+  $facet->api_version = 1;
+  $facet->name = 'apachesolr@' . APACHESOLR_EXTERNAL_INDEX_ID . ':block:provider';
+  $facet->searcher = 'apachesolr@' . APACHESOLR_EXTERNAL_INDEX_ID; // defined in the .module
+  $facet->realm = 'block';
+  $facet->facet = 'provider';
   $facet->enabled = TRUE;
   $facet->settings = array(
     'weight' => 0,
