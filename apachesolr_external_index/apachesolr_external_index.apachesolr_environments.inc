@@ -16,7 +16,7 @@ function apachesolr_external_index_apachesolr_environments() {
   // INDEX_ID is defined in the .module
   $environment->env_id = APACHESOLR_EXTERNAL_INDEX_ID;
   $environment->name = 'External transPLANT index';
-  $environment->url = 'http://pweb-2b:8045/solr/collection1';
+  $environment->url = 'http://localhost:8983/solr/transPlant';
   $environment->service_class = '';
   $environment->conf = array(
     'facet callbacks' => array('apachesolr_external_index_facet_callback'),
